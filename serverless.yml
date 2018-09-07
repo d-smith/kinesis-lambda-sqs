@@ -20,7 +20,6 @@ provider:
 functions:
   hello:
     handler: k3.doIt
-    batchSize: 100
     environment:
       DOWNSTREAM_Q_URL:
         Ref: K3Q
@@ -40,6 +39,7 @@ functions:
             Fn::GetAtt: 
               - K3Q
               - Arn
+          batchSize: 100
     onError: 
       Ref: ProcessingErrors
 
