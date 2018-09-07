@@ -1,0 +1,65 @@
+service: k3
+
+provider:
+  name: aws
+  runtime: nodejs8.10
+  stage: ${opt:stage, 'dev'}
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action: lambda:InvokeFunction
+      Resource: '*'
+    - Effect: "Allow"
+      Action: 
+          - sqs:SendMessageBatch
+          - sqs:SendMessage
+      Resource: '*'
+    - Effect: "Allow"
+      Action: sns:Publish
+      Resource: '*'
+
+functions:
+  hello:
+    handler: k3.doIt
+    batchSize: 100
+    environment:
+      DOWNSTREAM_Q_URL:
+        Ref: K3Q
+    events:
+      - stream:
+          type: kinesis
+          arn:
+            Fn::GetAtt:
+              - K3
+              - Arn
+  processRecord:
+    handler: k3.doRecord
+    reservedConcurrency: 10
+    events:
+      - sqs:
+          arn:
+            Fn::GetAtt: 
+              - K3Q
+              - Arn
+    onError: 
+      Ref: ProcessingErrors
+
+plugins:
+    - serverless-pseudo-parameters
+
+resources:
+  Resources:
+    K3:
+      Type: AWS::Kinesis::Stream
+      Properties:
+        Name: K3Stream
+        ShardCount: 1
+
+    ProcessingErrors:
+      Type: AWS::SNS::Topic
+      Properties:
+        TopicName: "K3ProcessingError-${self:provider.stage}"
+
+    K3Q:
+      Type: AWS::SQS::Queue
+      Properties:
+        QueueName: "K3Q-${self:provider.stage}"
