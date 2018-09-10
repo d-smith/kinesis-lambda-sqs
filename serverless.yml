@@ -39,12 +39,10 @@ functions:
             Fn::GetAtt: 
               - K3Q
               - Arn
-          batchSize: 100
+          batchSize: 1
     onError: 
       Ref: ProcessingErrors
 
-plugins:
-    - serverless-pseudo-parameters
 
 resources:
   Resources:

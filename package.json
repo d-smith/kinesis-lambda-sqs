@@ -10,8 +10,7 @@
   "license": "MIT",
   "devDependencies": {
     "aws-sdk": "^2.310.0",
-    "proxy-agent": "^3.0.1",
-    "serverless-pseudo-parameters": "^2.2.0"
+    "proxy-agent": "^3.0.1"
   },
   "dependencies": {
     "lodash": "^4.17.10"

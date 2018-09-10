@@ -13,7 +13,7 @@ Parameters to experiment with:
 Deploy the stack
 
 ```console
-sls deploy --aws-profile <profile>
+sls deploy --stage <stage> --aws-profile <profile>
 ```
 
 Write a batch of records to the stream. Edit send-batch.js to send batches of different sizes.
