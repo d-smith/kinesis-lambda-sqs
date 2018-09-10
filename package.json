@@ -10,6 +10,7 @@
   "license": "MIT",
   "devDependencies": {
     "aws-sdk": "^2.310.0",
+    "commander": "^2.18.0",
     "proxy-agent": "^3.0.1"
   },
   "dependencies": {
