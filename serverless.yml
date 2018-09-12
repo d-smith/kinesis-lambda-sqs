@@ -45,19 +45,17 @@ functions:
             Fn::GetAtt: 
               - K3Q
               - Arn
-          batchSize: 10
+          batchSize: 1
     onError: 
       Ref: ProcessingErrors
 
-plugins:
-    - serverless-pseudo-parameters
 
 resources:
   Resources:
     K3:
       Type: AWS::Kinesis::Stream
       Properties:
-        Name: K3Stream
+        Name: "K3Stream-${self:provider.stage}"
         ShardCount: 1
 
     ProcessingErrors:

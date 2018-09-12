@@ -13,8 +13,8 @@ const doIt = async (event, context, callback) => {
 
 
     chunks.forEach((chunk) => {
+    
         let id = 0;
-
         let entries = [];
 
         chunk.forEach((cr) => {
@@ -23,13 +23,12 @@ const doIt = async (event, context, callback) => {
                 Id: `${id++}`,
                 MessageBody: crData
             });
-
         })
 
         let params = {
             QueueUrl: process.env.DOWNSTREAM_Q_URL,
             Entries: entries
-        };
+        };  
 
         SQS.sendMessageBatch(params, (err, data) => {
             if(err) console.log(err, err.stack)
