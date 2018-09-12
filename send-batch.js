@@ -24,7 +24,7 @@ const makeBatch = (size) => {
 
 
 let params = {
-    Records: makeBatch(500),
+    Records: makeBatch(25),
     StreamName: 'K3Stream'
 };
 

@@ -32,6 +32,12 @@ functions:
               - Arn
   processRecord:
     handler: k3.doRecord
+    vpc:
+      securityGroupIds:
+        - sg-0795c1be5cf1c7c5c
+      subnetIds:
+        - subnet-004d36d2ec80d8009
+        - subnet-03472c7eb7ef6c783
     reservedConcurrency: 10
     events:
       - sqs:
@@ -39,7 +45,7 @@ functions:
             Fn::GetAtt: 
               - K3Q
               - Arn
-          batchSize: 100
+          batchSize: 10
     onError: 
       Ref: ProcessingErrors
 

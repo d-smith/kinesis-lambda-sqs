@@ -12,28 +12,29 @@ const doIt = async (event, context, callback) => {
     console.log(`${chunks.length} chunks`);
 
 
-    chunks.forEach((chunkRecs) => {
+    chunks.forEach((chunk) => {
         let id = 0;
 
         let entries = [];
 
-        chunkRecs.forEach((cr) => {
+        chunk.forEach((cr) => {
             let crData = Buffer.from(cr.kinesis.data, 'base64').toString()
             entries.push({
                 Id: `${id++}`,
                 MessageBody: crData
             });
 
-            let params = {
-                QueueUrl: process.env.DOWNSTREAM_Q_URL,
-                Entries: entries
-            };
-
-            SQS.sendMessageBatch(params, (err, data) => {
-                if(err) console.log(err, err.stack)
-                else {console.log(data);}
-            });
         })
+
+        let params = {
+            QueueUrl: process.env.DOWNSTREAM_Q_URL,
+            Entries: entries
+        };
+
+        SQS.sendMessageBatch(params, (err, data) => {
+            if(err) console.log(err, err.stack)
+            else {console.log(data);}
+        });
     });
 
     callback(null, 'ok');
