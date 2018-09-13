@@ -1,12 +1,21 @@
 const _ = require('lodash');
 const AWS = require('aws-sdk');
 const SQS = new AWS.SQS();
+var Chance = require('chance'),
+    chance = new Chance();
 
 console.log(`QueueUrl is ${process.env.DOWNSTREAM_Q_URL}`);
 
 const doIt = async (event, context, callback) => {
     let records = event["Records"];
     console.log(`doIt invoked with ${records.length}`);
+
+    let fail = chance.bool({likelihood: 70});
+    if(fail == true) {
+        console.log('Failure!!!');
+        callback(new Error('fail!'), 'ding it');
+        return;
+    }
     
     let chunks = _.chunk(records, 10);
     console.log(`${chunks.length} chunks`);
