@@ -10,7 +10,7 @@ const doIt = async (event, context, callback) => {
     let records = event["Records"];
     console.log(`doIt invoked with ${records.length}`);
 
-    let fail = chance.bool({likelihood: 70});
+    let fail = chance.bool({likelihood: 0});
     if(fail == true) {
         console.log('Failure!!!');
         callback(new Error('fail!'), 'ding it');
