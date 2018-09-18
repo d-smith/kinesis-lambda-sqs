@@ -28,31 +28,38 @@ const doIt = async (event, context, callback) => {
 
 
     chunks.forEach((chunk) => {
-    
-        let id = 0;
-        let entries = [];
-
-        chunk.forEach((cr) => {
-            let crData = Buffer.from(cr.kinesis.data, 'base64').toString()
-            entries.push({
-                Id: `${id++}`,
-                MessageBody: crData
-            });
-        })
-
-        let params = {
-            QueueUrl: process.env.DOWNSTREAM_Q_URL,
-            Entries: entries
-        };  
-
-        SQS.sendMessageBatch(params, (err, data) => {
-            if(err) console.log(err, err.stack)
-            else {console.log(data);}
+        AWSXray.captureAsyncFunc('processChunk', function(ss){
+            processChunk(chunk, ss);
         });
+        
     });
 
     callback(null, 'ok');
 };
+
+const processChunk = (chunk, subsegment) => {
+    let id = 0;
+    let entries = [];
+
+    chunk.forEach((cr) => {
+        let crData = Buffer.from(cr.kinesis.data, 'base64').toString()
+        entries.push({
+            Id: `${id++}`,
+            MessageBody: crData
+        });
+    })
+
+    let params = {
+        QueueUrl: process.env.DOWNSTREAM_Q_URL,
+        Entries: entries
+    };  
+
+    SQS.sendMessageBatch(params, (err, data) => {
+        if(err) console.log(err, err.stack)
+        else {console.log(data);}
+        subsegment.close();
+    });
+}
 
 const doRecord = async (event, context, callback) => {
     console.log(`doRecord called with event ${JSON.stringify(event)}`);
