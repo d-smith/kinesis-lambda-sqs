@@ -18,8 +18,13 @@ const doIt = async (event, context, callback) => {
         return;
     }
     
-    let chunks = _.chunk(records, 10);
-    console.log(`${chunks.length} chunks`);
+    var chunks;
+    AWSXray.captureFunc('chunkInput', function(subsegment){
+        chunks = _.chunk(records, 10);
+        console.log(`${chunks.length} chunks`);
+        subsegment.close();
+    });
+    
 
 
     chunks.forEach((chunk) => {
