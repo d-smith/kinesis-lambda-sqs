@@ -4,6 +4,7 @@ provider:
   name: aws
   runtime: nodejs8.10
   stage: ${opt:stage, 'dev'}
+  tracing: true
   iamRoleStatements:
     - Effect: "Allow"
       Action: lambda:InvokeFunction
@@ -15,6 +16,11 @@ provider:
       Resource: '*'
     - Effect: "Allow"
       Action: sns:Publish
+      Resource: '*'
+    - Effect: "Allow"
+      Action:
+        - xray:PutTraceSegments
+        - xray:PutTelemetryRecords
       Resource: '*'
 
 functions:
@@ -67,3 +73,6 @@ resources:
       Type: AWS::SQS::Queue
       Properties:
         QueueName: "K3Q-${self:provider.stage}"
+
+plugins:
+  - serverless-plugin-tracing
