@@ -1,5 +1,6 @@
 const _ = require('lodash');
-const AWS = require('aws-sdk');
+const AWSXray = require('aws-xray-sdk');
+const AWS =  AWSXray.captureAWS(require('aws-sdk'));
 const SQS = new AWS.SQS();
 var Chance = require('chance'),
     chance = new Chance();

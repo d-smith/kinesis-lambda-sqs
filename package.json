@@ -11,9 +11,11 @@
   "devDependencies": {
     "aws-sdk": "^2.310.0",
     "commander": "^2.18.0",
-    "proxy-agent": "^3.0.1"
+    "proxy-agent": "^3.0.1",
+    "serverless-plugin-tracing": "^2.0.0"
   },
   "dependencies": {
+    "aws-xray-sdk": "^2.0.0",
     "chance": "^1.0.16",
     "lodash": "^4.17.10"
   }
