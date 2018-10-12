@@ -61,9 +61,9 @@ const processChunk = (chunk, subsegment) => {
     });
 }
 
-const doRecord = async (event, context, callback) => {
+const doRecord = async (event, context) => {
     console.log(`doRecord called with event ${JSON.stringify(event)}`);
-    callback(null, 'ok');
+    return 'ok';
 };
 
 module.exports = {
